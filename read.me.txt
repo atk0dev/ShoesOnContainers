@@ -1,0 +1,93 @@
+ToDo
+1. Migrate to .NET Core 2.2 (and in docker images also, and remove <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>)
+2. Rename PicController to PicturesController
+3. Start ProductAPI with HTTPS by default
+4. Fix all StyleCop warnings
+5. Add Stylecop to project with own config
+6. Add repository
+7. Add automapper and return from API not dbcontext classes but dto classes
+8. Add POST and PUT with commands from CQRS practice course
+9. Add CQRS example with mongo and rabbitMQ from my repo
+10. add model validation to product catalog post and put requests
+11. Add versions to all projects
+12. Add home page to API with version and link to swagger
+13. Split Catalog container and Authentication container databases
+14. Fix warnings 
+15. Add UI for adding products to product catalog
+16. Add UI for users management
+17. Implement Mobile apps for service
+18. Try to add roles or claims based access to api methods
+
+
+==========================================================
+
+
+Docker
+docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=ProductApi(!)' -e 'MSSQL_PID=Express' -p 1445:1433 --name catalogdb microsoft/mssql-server-linux:latest
+
+docker ps
+
+docker exec -it catalogdb /opt/mssql-tools/bin/sqlcmd -S localhost -U sa
+
+docker start catalogdb
+docker stop catalogdb
+docker rm catalogdb
+
+
+docker pull microsoft/aspnetcore:2.0.0
+docker pull microsoft/aspnetcore-build:2.0.0
+
+docker images
+
+docker build -t shoes/catalog .
+
+docker rmi shoes/catalog
+docker system prune
+
+docker-compose build
+docker-compose up mssqlserver
+docker-compose up catalog
+docker-compose up tokenserver
+docker-compose up webmvc
+
+docker-compose down
+
+docker-compose up catalog webmvc
+
+
+docker-compose -f docker-compose.CartApi.redis.yml build
+docker-compose -f docker-compose.CartApi.redis.yml up basket.data
+
+docker-compose -f docker-compose.CartApi.yml build
+docker-compose -f docker-compose.CartApi.yml up basket.data
+docker-compose -f docker-compose.CartApi.yml up cart
+
+docker-compose up basket.data
+docker-compose up cart
+
+docker-compose -f docker-compose.OrderApi.yml build
+docker-compose -f docker-compose.OrderApi.yml up mssqlserver
+docker-compose -f docker-compose.OrderApi.yml up order.server
+
+docker exec -it mysqldb mysql -u root -p 
+
+docker-compose -f docker-compose.OrderApi.yml up tokenserver
+
+
+-------------- RUN ALL ---------------
+docker ps -a
+docker-compose build
+docker-compose up basket.data mssqlserver rabbitmq 
+
+user: me@myemail.com P@ssword1
+
+--------------------------------------
+
+==========================================================
+
+EF
+
+dotnet ef migrations add InitialMigration -o Data/Migration -c ShoesOnContainers.Services.ProductCatalogApi.Data.CatalogContext
+
+dotnet ef database update
+
